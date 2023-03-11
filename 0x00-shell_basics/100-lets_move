@@ -1,0 +1,2 @@
+#!/bin/bash
+av [[:upper:]]* /tmp/u
