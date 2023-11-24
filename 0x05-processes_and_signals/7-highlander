@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#Bash script that displays
+
+trap 'echo "I am invincible!!!"' SIGTERM
+while true
+do
+	echo "4-to_infinity_and_beyond"
+	sleep 2
+done
