@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Check if Nginx service is running
+if ! sudo systemctl is-active nginx; then
+    # Start Nginx service
+    sudo systemctl start nginx
+fi
+
+# Check if Nginx service is enabled
+if ! sudo systemctl is-enabled nginx; then
+    # Enable Nginx service
+    sudo systemctl enable nginx
+fi
+
+# Check Nginx configuration for errors
+if ! sudo nginx -t; then
+    echo "Nginx configuration has errors. Please fix them in /etc/nginx/nginx.conf or /etc/nginx/sites-available/default."
+    exit 1
+fi
+
+# Check if Nginx service is listening on port80
+if ! sudo netstat -tuln | grep 80; then
+    echo "Nginx is not listening on port 80. Please check the configuration file at /etc/nginx/nginx.conf or /etc/nginx/sites-available/default."
+    exit 1
+fi
+
+# Check firewall settings to ensure the allowed of port 80 
+if ! sudo ufw status | grep -q "80/tcp"; then
+    # Allow port 80
+    sudo ufw allow 80
