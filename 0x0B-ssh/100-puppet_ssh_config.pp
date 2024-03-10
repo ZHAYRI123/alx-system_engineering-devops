@@ -4,6 +4,7 @@ include stdlib
 file_line { 'Turn of passwd auth':
 	ensure => present,
 	path => 'etc/ssh/shh_config',
+	mode    => '0600',
 	line => 'PasswordAuthentication no',
 	replace => true,
 }
@@ -11,6 +12,7 @@ file_line { 'Turn of passwd auth':
 file_line { 'Delare identity file':
 	ensure => present,
         path => 'etc/ssh/shh_config',
+	mode    => '0600',
 	line => 'IdentityFile ~/.ssh/school',
 	replace => true,
 }
