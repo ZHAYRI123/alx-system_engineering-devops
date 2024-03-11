@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Update package index
+sudo apt-get -y update
+
+# Install Nginx
+sudo apt-get -y install nginx
+
+# Allow HTTP traffic through the firewall
+sudo ufw allow 'Nginx HTTP'
+
+# Echo "Hello World!" to the index file in /var/www/html
+echo "Hello Word!" | sudo tee /var/www/html/index
+
+# Use sed to add a rewrite rule to the default Nginx configuration
+sudo sed -i '/listen 80 default_server/a rewrite ^/redirect-me https://www.youtube.com/ permanent;' /etc/nginx/sites-avaible/default
+
+# Restart Nginx to apply changes
+sudo service nginx restart
