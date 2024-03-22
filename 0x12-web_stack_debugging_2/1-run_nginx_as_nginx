@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Configure nginx to run as nginx user
+sed -i 's/user www-data;/user nginx;/' /etc/nginx/nginx.conf
+
+# Modify nginx defaultserver block to listen on port 8080
+sed -i '/listen 80 default_server;/c\    listen 8080 default_server;' /etc/nginx/sites-available/default
+
+# Restart nginx to apply changes
+service nginx restart
