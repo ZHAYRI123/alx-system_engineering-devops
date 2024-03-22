@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Configure nginx to run as nginx user
 sed -i 's/user www-data;/user nginx;/' /etc/nginx/nginx.conf
 
