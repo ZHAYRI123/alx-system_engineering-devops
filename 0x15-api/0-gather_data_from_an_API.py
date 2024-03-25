@@ -1,6 +1,10 @@
 #!/usr/bin/python3
-import sys
+"""
+Script to retrieve information about an employee's TODO list progress using a REST API.
+"""
+
 import requests
+import sys
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or not sys.argv[1].isdigit():
