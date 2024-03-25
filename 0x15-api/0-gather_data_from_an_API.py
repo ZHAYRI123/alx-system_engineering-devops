@@ -1,38 +1,46 @@
 #!/usr/bin/python3
-"""
-Script to retrieve information about an employee's TODO list progress using a REST API.
-"""
-
+"""given employee ID, returns information about his/her TODO list progress."""
 import requests
 import sys
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
-        print("Usage: python script.py <employee_id>")
+    if len(sys.argv) < 2:
+        print("Usage: {} <employee ID>".format(sys.argv[0]))
         sys.exit(1)
 
-    id_employee = int(sys.argv[1])
-    url_user = 'https://jsonplaceholder.typicode.com/users/{}'.format(id_employee)
-    url_todos = 'https://jsonplaceholder.typicode.com/todos?userId={}'.format(id_employee)
-
     try:
-        response_user = requests.get(url_user)
-        response_todos = requests.get(url_todos)
-        response_user.raise_for_status()
-        response_todos.raise_for_status()
+        employee_id = int(sys.argv[1])
+    except ValueError:
+        print("Employee ID must be an integer")
+        sys.exit(1)
 
-        user_data = response_user.json()
-        todos_data = response_todos.json()
+    user_url = "https://jsonplaceholder.typicode.com/users/{}".format(
+        employee_id
+    )
+    todos_url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(
+        employee_id
+    )
 
-        employee_name = user_data.get('name')
-        total_tasks = len(todos_data)
-        done_tasks = [task for task in todos_data if task.get('completed')]
-        num_done_tasks = len(done_tasks)
+    response = requests.get(user_url)
+    if response.status_code != 200:
+        print("Error: Unable to fetch user data")
+        sys.exit(1)
 
-        print("Employee {} is done with tasks({}/{}):".format(employee_name, num_done_tasks, total_tasks))
-        for task in done_tasks:
-            print("\t{}".format(task.get('title')))
+    user = response.json()
+    employee_name = user.get("name")
 
-    except requests.exceptions.RequestException as e:
-        print("Error:", e)
+    response = requests.get(todos_url)
+    if response.status_code != 200:
+        print("Error: Unable to fetch todos data")
+        sys.exit(1)
 
+    todos = response.json()
+    done_tasks = [task for task in todos if task.get("completed")]
+
+    print(
+        "Employee {} is done with tasks({}/{}):".format(
+            employee_name, len(done_tasks), len(todos)
+        )
+    )
+    for task in done_tasks:
+        print("\t {}".format(task.get("title")))
